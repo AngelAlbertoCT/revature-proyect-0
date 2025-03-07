@@ -39,6 +39,32 @@ public class UserDao {
         }
     }
 
+    public UserModel getUserById(int id) {
+        UserModel user = null;
+        String query = "SELECT id, name, last_name, email, password, role_id FROM users WHERE id = ?";
+
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                user = new UserModel();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRoleId(rs.getInt("role_id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
     public UserModel getUserByEmail(String email) {
         UserModel user = null;
         String query = "SELECT id, name, last_name, email, password, role_id FROM users WHERE email = ?";
