@@ -1,13 +1,13 @@
-package com.projecto_0.service;
+package com.project0.service;
 
 import com.projecto_0.dao.UserDao;
 import com.projecto_0.models.UserModel;
+import com.projecto_0.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.Mockito;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +30,10 @@ class UserServiceTest {
     @Test
     void registerUser_ShouldReturnNewUser_WhenEmailNotExists() {
         // Arrange
-        String name = "John";
-        String lastName = "Doe";
-        String email = "john.doe@example.com";
-        String password = "password123";
+        String name = "Carlo";
+        String lastName = "Yañez";
+        String email = "cy@mail.com";
+        String password = "1234";
         int roleId = 2;
 
         when(userDaoMock.emailExists(email)).thenReturn(false);
@@ -55,11 +55,11 @@ class UserServiceTest {
     @Test
     void registerUser_ShouldReturnNull_WhenEmailAlreadyExists() {
         // Arrange
-        String email = "existing@example.com";
+        String email = "an@mail.com";
         when(userDaoMock.emailExists(email)).thenReturn(true);
 
         // Act
-        UserModel result = userService.registerUser("John", "Doe", email, "password123", 2);
+        UserModel result = userService.registerUser("Anahi", "Rosas", email, "a@mail.com", 1);
 
         // Assert
         assertNull(result, "Should return null when email already exists.");
@@ -70,8 +70,8 @@ class UserServiceTest {
     @Test
     void loginUser_ShouldReturnTrue_WhenCredentialsMatch() {
         // Arrange
-        String email = "john.doe@example.com";
-        String password = "password123";
+        String email = "a@mail.com";
+        String password = "1234";
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         UserModel user = new UserModel();
@@ -91,7 +91,7 @@ class UserServiceTest {
     @Test
     void loginUser_ShouldReturnFalse_WhenUserNotFound() {
         // Arrange
-        String email = "nonexistent@example.com";
+        String email = "nonexistent@mail.com";
         when(userDaoMock.getUserByEmail(email)).thenReturn(null);
 
         // Act
@@ -105,9 +105,9 @@ class UserServiceTest {
     @Test
     void loginUser_ShouldReturnFalse_WhenPasswordDoesNotMatch() {
         // Arrange
-        String email = "john.doe@example.com";
+        String email = "a@mail.com";
         String password = "wrongPassword";
-        String hashedPassword = BCrypt.hashpw("password123", BCrypt.gensalt());
+        String hashedPassword = BCrypt.hashpw("1234", BCrypt.gensalt());
 
         UserModel user = new UserModel();
         user.setEmail(email);
